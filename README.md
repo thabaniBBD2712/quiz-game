@@ -1,7 +1,7 @@
 # QUIZ Game
 
 ## Description
-pending
+The objective is to develop a quiz game software system that generates a unique game shortcode for users to share. The system will utilize a database, possibly hosted on AWS RDS, to store quiz data. User authentication will be handled by an external service. The game will consist of five questions with three options each, timed and limited to one attempt. Results will be displayed at the end. The system should allow for future iterations and prioritize user engagement with a "fail is fail" approach.
 
 ## Prerequisites
 * node JS
