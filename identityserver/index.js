@@ -1,41 +1,45 @@
-import level from 'level'
-import mssql from 'mssql';
+import level from 'level';
 import dotenv from 'dotenv';
 import express from 'express';
 import { port } from './config/config.js';
 import handleRegisterRoute from './handlers/register.js';
-import handleExchangeCredentialsRoute from './handlers/exchange-credentials.js'
+import handleExchangeCredentialsRoute from './handlers/exchange-credentials.js';
 import bearer from './middleware/verify-bearer.js';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
 dotenv.config()
 
 const app = express();
+const router = express.Router();
 
-const db_config = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    server: process.env.DB_SERVER,
-    pool: {
-        max: 10,
-        min: 0,
-        idleTimeoutMillis: 3000
-    },
-    options: {
-        encrypt: true,
-        trustServerCertificate: true
-    }
-}
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(cors());
 
-mssql.on('error', err => {})
-mssql.connect(db_config).then(pool => {
-    return pool.request().input('input_parameter', mssql.VarChar, 'motheo1').query('select * from Player where playerID = @input_parameter')
-}).then(result =>{
-    console.log(result);
-    console.log('success')
-}).catch(err => {console.log(err)})
+/*
+router.use((request, response, next) => {
+    console.log('middleware');
+    next();
+})*/
+
+/*
+router.route('/user/:userId').get((request, response) => {
+    getUser(request.params.userId)
+        .then((data) => {
+            if (data) {
+                response.json(data);
+            } else {
+                response.status(404).json({ error: 'User not found' });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            response.status(500).json({ error: 'Internal server error' });
+        });
+});*/
+
 app.locals.store = new level.Level('./store');
-//app.locals.ttl = ttl(app.locals.store);
 
 //routes
 app.post('/register', handleRegisterRoute);
