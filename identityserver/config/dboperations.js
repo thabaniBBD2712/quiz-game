@@ -15,9 +15,3 @@ export async function getUser(userId){
         console.log(error);
     }
 }
-
-/*
-export default[
-    express.json(),
-    getUser,
-];*/
