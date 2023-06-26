@@ -92,7 +92,6 @@ async function generateBearerToken(request, response, identity){
         )
     );
 
-    console.log(token);
     const store = request.app.locals.store;
     //can be retrieved later for validation
     await store.put(`jwt-key:${keyid}`, {
