@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/quiz.css">
+  <script src="./js/quiz.js"></script>
+  <title>Quiz</title>
+</head>
+<body>
+    
+  <nav class="navbar">
+    <a href="#home">Quiz List</a>
+    <a href="quiz.html">Game</a>
+    <a href="quiz.html">Log Out</a>
+  </nav>
+<div id="quiz-container">
+    <h1>Math Quiz</h1>
+    <div id="question"></div>
+    <input type="text" id="answer" placeholder="Enter your answer">
+    <button onclick="checkAnswer()">Submit</button>
+    <div id="result"></div>
+  </div>
+  <footer>
+    <p>&copy; 2023 Quiz Game. All rights reserved.</p>
+  </footer>
+  <script>  
+const quizData = [
+  {
+    question: "What is 2 + 2?",
+    answer: "4"
+  },
+  {
+    question: "What is 10 - 5?",
+    answer: "5"
+  },
+  {
+    question: "What is 3 * 4?",
+    answer: "12"
+  },
+  {
+    question: "What is 20 / 5?",
+    answer: "4"
+  },
+  {
+    question: "What is the square root of 64?",
+    answer: "8"
+  },
+  {
+    question: "What is 7 + 3?",
+    answer: "10"
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionElement = document.getElementById("question");
+const answerElement = document.getElementById("answer");
+const resultElement = document.getElementById("result");
+
+function loadQuestion() {
+  const currentQuiz = quizData[currentQuestion];
+  questionElement.textContent = currentQuiz.question;
+}
+
+function checkAnswer() {
+  const userAnswer = answerElement.value.trim().toLowerCase();
+  const currentQuiz = quizData[currentQuestion];
+
+  if (userAnswer === currentQuiz.answer.toLowerCase()) {
+    score++;
+    resultElement.textContent = "Correct!👍";
+  } else {
+    resultElement.textContent = "Wrong! 👎";
+  }
+
+  currentQuestion++;
+
+  if (currentQuestion < quizData.length) {
+    loadQuestion();
+    answerElement.value = "";
+  } else {
+    showFinalScore();
+  }
+}
+
+function showFinalScore() {
+  const totalScore = (score / (quizData.length-1)) * 100;
+  questionElement.textContent = `Quiz completed. 🎉 Your score is ${totalScore}%`;
+  answerElement.style.display = "none";
+  resultElement.style.display = "none";
+}
+
+loadQuestion(); 
+  </script>
+</body>
+</html>
+
+
+
