@@ -1,6 +1,7 @@
 import express from 'express';
 import argon from 'argon2';
 import UUID from 'pure-uuid';
+import { addUser, getUser } from '../config/dboperations.js';
 
 
 async function handleRegister(request, response){
@@ -15,35 +16,23 @@ async function handleRegister(request, response){
     //register
     const hash = await argon.hash(request.body.password);
     const username = request.body.username.trim();
-    const lowerCaseUsername = username.toLowerCase();
-    const credentialsKey = `credentials:${lowerCaseUsername}`;
 
     const store = request.app.locals.store;
 
-    if(await store.get(credentialsKey).catch(() => undefined)){
-        return response.sendStatus(409); //already exisits
+     //check if username already exists
+    if(await getUser(username).catch(() => undefined)){
+        return response.sendStatus(409);
     }
 
     const uuid = new UUID(4).format();
-    const identity = {
-        id: uuid,
-        primaryUsername: username
-    };
 
-    //store identity
-    await store.put(`identity:${uuid}`, JSON.stringify(identity));
-    //store new credentials (our own database)
-    await store.put(credentialsKey, {
-        hash: hash,
-        identity: uuid
-    },{valueEncoding: 'json'});
+    //Store credentials to our db
+    addUser(uuid, username, hash);
 
     //return 201, new id.
-
     return response.status(201).json({
         id: uuid
     });
-
 }
 
 function handleRegisterRoute(request, response, next){
