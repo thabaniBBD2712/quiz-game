@@ -1,7 +1,7 @@
 You will need to create ssl files in the ssl folder in the quizapi folder:
-- openssl genrsa -out privatekey.pem 2048
-- openssl req -new -key privatekey.pem -out csr.pem
-- openssl x509 -req -days 365 -in csr.pem -signkey privatekey.pem -out certificate.pem
+- openssl genrsa -out privateKey.pem 2048
+- openssl req -new -key privateKey.pem -out csr.pem
+- openssl x509 -req -days 365 -in csr.pem -signkey privateKey.pem -out certificate.pem
 
 You will also need a .env file in this quizapp directory:
 DB_HOST=your_db_host

@@ -22,7 +22,7 @@ const addQuiz = async (req, res) => {
 
     // Insert quiz
     const quizQuery = `
-      INSERT INTO Quiz (quiz_text, quiz_short_code)
+      INSERT INTO Quiz (quiz_title, quiz_short_code)
       VALUES (@quizText, @quizShortCode);
     `;
     await db.query(quizQuery, { quizText, quizShortCode });
@@ -45,11 +45,11 @@ const addQuiz = async (req, res) => {
 
     // Insert options
     const optionQuery = `
-      INSERT INTO QuizOption (option_text, question_id, is_correct_option)
+      INSERT INTO QuizOption (quizoption_text, question_id, is_correct_QuizOption)
       VALUES (@optionText, @questionId, @isCorrect);
     `;
     for (const option of options) {
-      await db.query(optionQuery, { optionText: option.optionText, questionId, isCorrect: option.isCorrect });
+      await db.query(optionQuery, { optionText: option.quizoption_text, questionId, isCorrect: option.is_correct_QuizOption });
     }
 
     res.status(201).json({ message: 'Quiz added successfully', shortcode: quizShortCode });
