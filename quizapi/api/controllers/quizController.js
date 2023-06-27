@@ -114,11 +114,19 @@ const getQuiz = async (req, res) => {
 
 const addToScore = async (req, res) => {
   try {
-    const { quizId, userId, score } = req.body;
+    const { shortCode } = req.params;
+    const { userId, score } = req.body;
+
+    // Retrieve the inserted quiz to get the quizId
+    const insertedQuizQuery = `
+      SELECT * FROM Quiz WHERE quiz_short_code = @quizShortCode;
+    `;
+    const insertedQuizResult = await db.query(insertedQuizQuery, { quizShortCode : shortCode });
+    const quizId = insertedQuizResult.recordset[0].quiz_id;
 
     // Insert score
     const scoreQuery = `
-      INSERT INTO Scores (quiz_id, user_id, score)
+      INSERT INTO Score (quiz_id, user_id, score)
       VALUES (@quizId, @userId, @score);
     `;
     await db.query(scoreQuery, { quizId, userId, score });

@@ -4,6 +4,6 @@ const quizController = require('../controllers/quizController');
 
 router.post('/', quizController.addQuiz);
 router.get('/:shortCode', quizController.getQuiz);
-router.post('/:quizId/score', quizController.addToScore);
+router.post('/:shortCode/score', quizController.addToScore);
 
 module.exports = router;
