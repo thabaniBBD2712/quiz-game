@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express from 'express';
 
 export const db_config = {
     user: process.env.DB_USER,
@@ -17,10 +16,3 @@ export const db_config = {
         trustServerCertificate: true
     }
 }
-
-/*
-export default [
-    express.json(),
-    db_config
-];
-*/

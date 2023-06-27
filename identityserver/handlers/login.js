@@ -5,6 +5,7 @@ import JSONWebToken from 'jsonwebtoken';
 import ms from 'ms';
 //used to identify certificate
 import UUID from 'pure-uuid';
+import { getUser } from '../config/dboperations.js';
 
 
 async function getIdentity(request, response){
@@ -17,28 +18,29 @@ async function getIdentity(request, response){
     }
 
     //validation of password and return associated identity
-    const store = request.app.locals.store;
     const username = request.body.username.trim();
-    const lowerCaseUsername = username.toLowerCase();
-    const credentialsKey = `credentials:${lowerCaseUsername}`;
-    const passwordInformation = await store.get(credentialsKey).catch(() => undefined);
-    
+    const exisitingPlayer = await getUser(username).then(result => {
+        return result;
+    });
 
-    let obj = JSON.parse(passwordInformation)
-
-    if (!(passwordInformation && obj.hash && obj.identity)) {
+    if (!(exisitingPlayer && exisitingPlayer.playerPassword && exisitingPlayer.playerID && exisitingPlayer.username)) {
         response.sendStatus(401);
      //handled
      return undefined;
    }
 
-   const match = await argon.verify(obj.hash, request.body.password);
+   const match = await argon.verify(exisitingPlayer.playerPassword, request.body.password);
    if(!match){
     response.sendStatus(401);
     //handled
     return undefined;
    }
-   return obj.identity;
+
+   const identity = {
+    id: exisitingPlayer.playerID,
+    primaryUsername: exisitingPlayer.username
+    };
+   return identity;
 }
 
 async function getIdentityForCredentials(request, response){
@@ -98,17 +100,6 @@ async function generateBearerToken(request, response, identity){
         algorithm,
         publicKey
     }, {valueEncoding: 'json'});
-
-    /*
-    //mark value for expiry
-    await new Promise(
-        (resolve, reject) => request.app.locals.ttl.ttl(
-            `jwt-key:${keyid}`,
-            expiryInMS,
-            (error) => error ? reject(error) : resolve()
-        )
-    );
-    */
 
     response.json({
         token,
