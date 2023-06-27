@@ -1,5 +1,0 @@
-PORT = 3000
-DB_NAME=identitydb
-DB_PASSWORD=adminadmin
-DB_SERVER=identity-yoh.cgaw2qhvndcr.us-east-1.rds.amazonaws.com
-DB_USER=admin
