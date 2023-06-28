@@ -138,8 +138,67 @@ const addToScore = async (req, res) => {
   }
 };
 
+// Retrieve QuizShort
+const getQuizShort = async (req, res) => {
+  try {
+    const quizShortQuery = `
+      SELECT * FROM QuizShort;
+    `;
+    const quizShortResult = await db.query(quizShortQuery);
+    const quizShortData = quizShortResult.recordset;
+
+    res.json({ quizShortData });
+  } catch (error) {
+    console.error('Error retrieving QuizShort data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const getQuizShortById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const quizShortQuery = `
+      SELECT * FROM QuizShort WHERE id = @id;
+    `;
+    const quizShortResult = await db.query(quizShortQuery, { id });
+
+    if (quizShortResult.recordset.length === 0) {
+      return res.status(404).json({ error: 'QuizShort not found' });
+    }
+
+    const quizShort = quizShortResult.recordset[0];
+
+    res.json({ quizShort });
+  } catch (error) {
+    console.error('Error retrieving QuizShort by ID:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const insertQuizShort = async (req, res) => {
+  try {
+    const { question, answer } = req.body;
+
+    const insertQuery = `
+      INSERT INTO QuizShort (Question, Answer)
+      VALUES (@question, @answer);
+    `;
+
+    await db.query(insertQuery, { question, answer });
+
+    res.status(201).json({ message: 'QuizShort record inserted successfully' });
+  } catch (error) {
+    console.error('Error inserting QuizShort record:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   addQuiz,
   getQuiz,
   addToScore,
+  getQuizShort,
+  getQuizShortById,
+  insertQuizShort,
 };
