@@ -7,10 +7,11 @@ const quizRoutes = require('./api/routes/quiz');
 const cors = require('cors');
 
 dotenv.config();
-// Enable CORS for all origins
-app.use(cors());
+
 
 const app = express();
+// Enable CORS for all origins
+app.use(cors());
 
 db.connect();
 
