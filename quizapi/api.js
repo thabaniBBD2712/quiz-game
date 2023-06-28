@@ -4,8 +4,11 @@ const express = require('express');
 const dotenv = require('dotenv');
 const db = require('./api/db');
 const quizRoutes = require('./api/routes/quiz');
+const cors = require('cors');
 
 dotenv.config();
+// Enable CORS for all origins
+app.use(cors());
 
 const app = express();
 
