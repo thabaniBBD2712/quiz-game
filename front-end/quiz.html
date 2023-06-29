@@ -25,33 +25,21 @@
     <p>&copy; 2023 Quiz Game. All rights reserved.</p>
   </footer>
   <script>  
-const quizData = [
-  {
-    question: "What is 2 + 2?",
-    answer: "4"
-  },
-  {
-    question: "What is 10 - 5?",
-    answer: "5"
-  },
-  {
-    question: "What is 3 * 4?",
-    answer: "12"
-  },
-  {
-    question: "What is 20 / 5?",
-    answer: "4"
-  },
-  {
-    question: "What is the square root of 64?",
-    answer: "8"
-  },
-  {
-    question: "What is 7 + 3?",
-    answer: "10"
-  }
-];
+  function fetchQuizData() {
+  return fetch('https://44.211.144.227:7777/quiz/short')
+    .then(response => response.json())
+    .then(data => {
+      return data; // Return the retrieved data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
 
+fetchQuizData()
+  .then(data => {
+const quizData = data['quizShortData'];
+console.log(quizData);
 let currentQuestion = 0;
 let score = 0;
 
@@ -61,7 +49,8 @@ const resultElement = document.getElementById("result");
 
 function loadQuestion() {
   const currentQuiz = quizData[currentQuestion];
-  questionElement.textContent = currentQuiz.question;
+  console.log(currentQuiz)
+  questionElement.textContent = currentQuiz.Question;
 }
 
 function checkAnswer() {
@@ -93,6 +82,11 @@ function showFinalScore() {
 }
 
 loadQuestion(); 
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
   </script>
 </body>
 </html>

@@ -1,25 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./css/login.css">
   <title>Login</title>
 </head>
 <body>
   <main>
-    <form action="login.php" method="post">
+    <form id="myForm">
       <h2>Login</h2>
+      <p id="error-message"></p>
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required>
-      <input type="submit" value="Login">
+      <button type="submit">Login</button>
       <p>Not registered yet? <a href="register.html">Register</a></p>
     </form>
   </main>
   <footer>
     <p>&copy; 2023 Quiz Game. All rights reserved.</p>
   </footer>
+  <script>
+  function submitForm(event) {
+      event.preventDefault();
+
+      const usernameI = document.getElementById('username').value;
+      const passwordI = document.getElementById('password').value;
+    
+      const loginObject = {
+        from: 'username-password',
+        to: 'bearer',
+        username: usernameI,
+        password: passwordI
+     };
+
+      fetch('https://44.211.253.239:3000/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(loginObject)
+})
+  .then(response => {
+    console.log(response.ok)
+    if (response.ok) {
+        window.location.href = "./quiz.html";
+    return response.json();
+    } else {
+        let errorMessage = document.getElementById('error-message');
+        errorMessage.innerText = "Invalid username or password";
+        errorMessage.style.color = 'red';
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+    }
+    const form = document.getElementById('myForm');
+    form.addEventListener('submit', submitForm);
+  </script>
 </body>
 </html>
