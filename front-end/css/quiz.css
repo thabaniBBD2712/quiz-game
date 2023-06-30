@@ -1,7 +1,8 @@
+body{background-color:#f2f2f2 ;}
 #quiz-container {
     text-align: center;
-    padding: 200px;
     background-color: #f2f2f2;
+    padding-top: 250px;
   }
   
   h1 {

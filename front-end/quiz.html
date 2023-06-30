@@ -17,77 +17,13 @@
 <div id="quiz-container">
     <h1>Math Quiz</h1>
     <div id="question"></div>
-    <input type="text" id="answer" placeholder="Enter your answer">
-    <button onclick="checkAnswer()">Submit</button>
+    <input type="number" max="10" id="answer" placeholder="Enter your answer">
+    <button id="myButton">Submit</button>
     <div id="result"></div>
   </div>
   <footer>
     <p>&copy; 2023 Quiz Game. All rights reserved.</p>
   </footer>
-  <script>  
-  function fetchQuizData() {
-  return fetch('https://44.211.144.227:7777/quiz/short')
-    .then(response => response.json())
-    .then(data => {
-      return data; // Return the retrieved data
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
-
-fetchQuizData()
-  .then(data => {
-const quizData = data['quizShortData'];
-console.log(quizData);
-let currentQuestion = 0;
-let score = 0;
-
-const questionElement = document.getElementById("question");
-const answerElement = document.getElementById("answer");
-const resultElement = document.getElementById("result");
-
-function loadQuestion() {
-  const currentQuiz = quizData[currentQuestion];
-  console.log(currentQuiz)
-  questionElement.textContent = currentQuiz.Question;
-}
-
-function checkAnswer() {
-  const userAnswer = answerElement.value.trim().toLowerCase();
-  const currentQuiz = quizData[currentQuestion];
-
-  if (userAnswer === currentQuiz.answer.toLowerCase()) {
-    score++;
-    resultElement.textContent = "Correct!👍";
-  } else {
-    resultElement.textContent = "Wrong! 👎";
-  }
-
-  currentQuestion++;
-
-  if (currentQuestion < quizData.length) {
-    loadQuestion();
-    answerElement.value = "";
-  } else {
-    showFinalScore();
-  }
-}
-
-function showFinalScore() {
-  const totalScore = (score / (quizData.length-1)) * 100;
-  questionElement.textContent = `Quiz completed. 🎉 Your score is ${totalScore}%`;
-  answerElement.style.display = "none";
-  resultElement.style.display = "none";
-}
-
-loadQuestion(); 
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-
-  </script>
 </body>
 </html>
 
