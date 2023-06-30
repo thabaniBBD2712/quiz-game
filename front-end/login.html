@@ -3,6 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./css/login.css">
+  <script src="./js/login.js"></script>
   <title>Login</title>
 </head>
 <body>
@@ -21,44 +22,5 @@
   <footer>
     <p>&copy; 2023 Quiz Game. All rights reserved.</p>
   </footer>
-  <script>
-  function submitForm(event) {
-      event.preventDefault();
-
-      const usernameI = document.getElementById('username').value;
-      const passwordI = document.getElementById('password').value;
-    
-      const loginObject = {
-        from: 'username-password',
-        to: 'bearer',
-        username: usernameI,
-        password: passwordI
-     };
-
-      fetch('https://44.211.253.239:3000/login', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(loginObject)
-})
-  .then(response => {
-    console.log(response.ok)
-    if (response.ok) {
-        window.location.href = "./quiz.html";
-    return response.json();
-    } else {
-        let errorMessage = document.getElementById('error-message');
-        errorMessage.innerText = "Invalid username or password";
-        errorMessage.style.color = 'red';
-    }
-  })
-  .catch(error => {
-    console.error(error);
-  });
-    }
-    const form = document.getElementById('myForm');
-    form.addEventListener('submit', submitForm);
-  </script>
 </body>
 </html>

@@ -1,5 +1,12 @@
 function fetchQuizData() {
-return fetch('https://44.211.144.227:7777/quiz/short')
+return fetch('https://44.211.144.227:7777/quiz/short',{
+    method:'GET',
+    headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        'Authorization':localStorage.getItem('awt')
+    }
+})
   .then(response => response.json())
   .then(data => {
     return data; 
