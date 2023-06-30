@@ -8,10 +8,40 @@ const cors = require('cors');
 
 dotenv.config();
 
+const corsOptions = {
+  origin: 'http://127.0.0.1:5500',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+  optionsSuccessStatus: 200,
+};
 
 const app = express();
 // Enable CORS for all origins
-app.use(cors());
+app.use(cors(corsOptions));
+
+const verifyToken = async (req, res, next) => {
+  const token = req.headers.authorization;
+
+  try {
+    const url = process.env.VERIFY;
+    const fetcher = await fetch(url, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+
+    if (fetcher.status == 200) {
+      next();
+    } else {
+      res.status(401).json({ message: 'Unauthorized' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error + Unauthenticated ' + error });
+  }
+};
+
+app.use(verifyToken);
+
 
 db.connect();
 
